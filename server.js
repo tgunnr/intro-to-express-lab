@@ -33,18 +33,14 @@ app.get('/collectibles/:index', function(req, res) {
 
 // Exercise 4
 
-app.get('/shoes', (req, res) => { 
-  if (req.query['min-price'] && req.query['max-price'] && req.query.type) {
-    let minPrice = req.query['min-price']
-    let maxPrice = req.query['max-price']
-    let shoeType = req.query.type
-    let filteredShoes = shoes.filter((shoe) => {
-      return (shoe.price >= minPrice && shoe.price <= maxPrice && shoe.type === shoeType)
-    })
-    res.send(filteredShoes)
-  } else {
-    res.send(shoes)
-  }
+app.get('/shoes', function(req, res) {
+  const minPrice = req.query['min-price'] ? req.query['min-price'] : 0
+  const maxPrice = req.query['max-price'] ? req.query['max-price'] : Infinity
+  const type = req.query.type ? req.query.type : ''
+  const filteredShoes = shoes.filter(shoe => {
+    return shoe.price >= minPrice && shoe.price <= maxPrice && shoe.type.includes(type)
+  })
+  res.send(filteredShoes)
 })
 
 app.listen(3000, function() {
